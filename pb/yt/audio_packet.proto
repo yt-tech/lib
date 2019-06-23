@@ -1,0 +1,13 @@
+syntax      = "proto3";
+
+package yt;
+
+
+
+message AudioPacket {
+      int64      timestamp    = 1;
+      uint32     qn           = 2;
+      uint32     topicID      = 3;
+      uint32     userID       = 4;
+      bytes      audioData    = 5;
+    }

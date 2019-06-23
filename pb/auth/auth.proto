@@ -1,0 +1,19 @@
+//指定版本
+//注意proto3与proto2的写法有些不同
+syntax = "proto3";
+
+//包名，通过protoc生成时go文件时
+package auth;
+
+//账号
+message authInfo {
+    string userid = 1;
+    int32  status = 2;
+    int32  anchor = 3; //锚
+}
+
+message updateInfo {
+    string  table = 1;
+    string   data = 2;
+    int32  anchor = 3;
+}

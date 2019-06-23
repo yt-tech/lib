@@ -1,0 +1,61 @@
+package main
+
+import (
+	"fmt"
+	"yt/packets/pb/gateway"
+
+	"github.com/gogo/protobuf/proto"
+)
+
+func write() {
+	c1 := &gateway.AccountInfo{
+		Account:      "1234567890",
+		AccountType:  0,
+		Version:      "0.0.1",
+		Platform:     "123456789012345678901234567890",
+		HardInfo:     "123456789012345678901234567890",
+		Device:       "123456789012345678901234567890",
+		OsInfo:       "123456789012345678901234567890",
+		Imei:         "123456789012345678901234567890",
+		Meid:         "123456789012345678901234567890",
+		Imsi:         "123456789012345",
+		Iccid:        "123456789012345678901234567890",
+		SeriesNumber: "123456789012345678901234567890",
+		Reserve1:     "123456789012345678901234567890",
+		Reserve2:     "123456789012345678901234567890",
+		Reserve3:     "123456789012345678901234567890",
+		Reserve4:     "123456789012345678",
+		Reserve5:     "123456789012345678",
+		Reserve6:     "123456789012345678",
+		Reserve7:     "123456789012345678",
+		Reserve8:     "123456789012345678",
+	}
+
+	// 使用protobuf工具把struct数据类型格式化成字节数组（压缩和编码）
+	data, err := proto.Marshal(c1)
+	if err != nil {
+		fmt.Println(err)
+	}
+	// 把字节数组写入到文件中
+	fmt.Println(len(data))
+}
+
+// func read() {
+// 	// 以字节数组的形式读取文件内容
+// 	data, _ := ioutil.ReadFile("test.txt")
+
+// 	class := new(gateway.AccountInfo)
+
+// 	// 使用protobuf工具把字节数组解码成struct(解码)
+// 	proto.Unmarshal(data, class)
+
+// 	log.Println(class.Num)
+// 	for _, v := range class.Students {
+// 		log.Println(v.Name, v.Age, v.Sex)
+// 	}
+// }
+
+func main() {
+	write()
+	// read()
+}

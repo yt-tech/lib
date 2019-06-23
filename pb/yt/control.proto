@@ -1,0 +1,36 @@
+syntax      = "proto3";
+
+package yt;
+
+
+
+message Control {
+      ProtocolType protocolType     = 1;
+      uint32        userID          = 2;
+      uint32        topicID         = 3;
+      uint32        ackCode         = 4;
+      string        subgroup        = 5;  //子集
+      uint32        topicPriority   = 6;  //群组优先级 1-9； 1最大，9最小；
+      uint32        micPriority     = 7;  //麦克优先级 1-9； 1最大，9最小；
+      uint32        orgID           = 8;
+    }
+
+//协议类型
+enum ProtocolType {
+     CONNECT           = 0;
+     CONNECTACK        = 1;
+     SUB               = 2;
+     SUBACK            = 3;
+     UNSUB             = 4;
+     UNSUBACK          = 5;
+     HOLDMIC           = 6;
+     HOLDMICACK        = 7;
+     RELEASEMIC        = 8;
+     RELEASEMICACK     = 9;
+     DISCONNECT        = 10;
+     DISCONNECTACK     = 11;
+     REGISTER          = 12;
+     REGISTERACK       = 13;
+     SYSTEM            = 14;
+     SYSTEMACK         = 15;
+    }

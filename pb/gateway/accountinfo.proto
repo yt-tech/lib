@@ -1,0 +1,41 @@
+//指定版本
+//注意proto3与proto2的写法有些不同
+syntax = "proto3";
+
+//包名，通过protoc生成时go文件时
+package gateway;
+
+//账号
+message UserInfo {
+    string      account        = 1;
+    AccountType accountType    = 2;
+    string      version        = 3;
+    string      platform       = 4;
+    string      hardInfo       = 5;
+    string      device         = 6; 
+    string      osInfo         = 7;
+    string      imei           = 8;
+    string      meid           = 9;
+    string      imsi           = 10;
+    string      iccid          = 11;
+    string      seriesNumber   = 12;
+    string      reserve1       = 13;
+    string      reserve2       = 14;
+    string      reserve3       = 15;
+    string      reserve4       = 16;
+    string      reserve5       = 17;
+    string      reserve6       = 18;
+    string      reserve7       = 19;
+    string      reserve8       = 20;
+}
+
+//账号类型
+enum AccountType {
+    USERDEFINED = 0;
+    MOBILE      = 1;
+    EMAIL       = 2;
+    HARDINFO    = 3;
+    RESERVE1    = 4;
+    RESERVE2    = 5;
+    RESERVE3    = 6;
+}
