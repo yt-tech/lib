@@ -6,8 +6,6 @@ package yt
 
 import "net"
 
-
-
 // Client is used to connect to a rmnp server
 type Client struct {
 	protocolImpl
@@ -30,7 +28,7 @@ type Client struct {
 
 // NewClient creates and returns a new Client instance that will try to connect
 // to the given server address. It does not connect automatically.
-func NewClient(server string) *Client {
+func NewClient(server *net.UDPAddr) *Client {
 	c := new(Client)
 
 	c.readFunc = func(conn *net.UDPConn, buffer []byte) (int, *net.UDPAddr, bool) {

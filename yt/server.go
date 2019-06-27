@@ -28,7 +28,7 @@ type Server struct {
 
 // NewServer creates and returns a new Server instance that will listen on the
 // specified address and port. It does not start automatically.
-func NewServer(address string) *Server {
+func NewServer(address *net.UDPAddr) *Server {
 	s := new(Server)
 
 	s.readFunc = func(conn *net.UDPConn, buffer []byte) (int, *net.UDPAddr, bool) {

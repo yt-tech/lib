@@ -81,10 +81,7 @@ type protocolImpl struct {
 	onPacket     PacketCallback
 }
 
-func (impl *protocolImpl) init(address string) {
-	addr, err := net.ResolveUDPAddr("udp", address)
-	checkError("Failed to resolve udp address", err)
-
+func (impl *protocolImpl) init(addr *net.UDPAddr) {
 	impl.address = addr
 	impl.connectGuard = newExecGuard()
 	impl.connections = make(map[uint32]*Connection)
