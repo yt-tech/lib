@@ -6,8 +6,8 @@ package yt
 
 import (
 	"encoding/binary"
-	"fmt"
 	"hash/crc32"
+	"log"
 	"net"
 	"sync/atomic"
 	"time"
@@ -15,7 +15,7 @@ import (
 
 func checkError(msg string, err error) {
 	if err != nil {
-		fmt.Println(msg, "=>", err)
+		log.Println(msg, "=>", err)
 		panic(err)
 	}
 }
@@ -23,7 +23,7 @@ func checkError(msg string, err error) {
 func antiPanic(callback func()) {
 	if err := recover(); err != nil {
 		atomic.AddUint64(&StatGoRoutinePanics, 1)
-		fmt.Println("panic:", err)
+		log.Println("panic:", err)
 
 		if callback != nil {
 			go func() {
