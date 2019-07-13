@@ -14,7 +14,7 @@ var (
 	CfgProtocolID byte = 231
 
 	// CfgParallelListenerCount is the amount of goroutines that will be spawned to listen on incoming requests.
-	CfgParallelListenerCount = 4
+	CfgParallelListenerCount = 1
 
 	// CfgMaxSendReceiveQueueSize is the max size of packets that can be queued up before they are processed.
 	CfgMaxSendReceiveQueueSize = 100
@@ -47,7 +47,7 @@ var (
 
 var (
 	// CfgTimeoutThreshold is the time after which a connection times out if no packets have being send for the specified amount of time.
-	CfgTimeoutThreshold time.Duration = 4000
+	CfgTimeoutThreshold time.Duration = 40000
 
 	// CfgMaxPing is the max ping before a connection times out.
 	CfgMaxPing int16 = 150
