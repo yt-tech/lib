@@ -9,9 +9,9 @@ message Control {
       uint32        orgID           = 2;
       uint32        userID          = 3;
       uint32        rootGroupID     = 4;
-      uint32        topicID         = 5;
+      uint32        groupID         = 5;
       uint32        ackCode         = 6;
-      string        subgroup        = 7;  //子集
+      string        subGroup        = 7;  //子集
       uint32        topicPriority   = 8;  //群组优先级 1-9； 1最大，9最小；
       uint32        micPriority     = 9;  //麦克优先级 1-9； 1最大，9最小；
     }
