@@ -1,6 +1,6 @@
-syntax      = "proto3";
+syntax = "proto3";
 
-package yt;
+package order;
 
 
 
@@ -18,20 +18,21 @@ message Control {
 
 //协议类型
 enum ProtocolType {
-     CONNECT           = 0;
-     CONNECTACK        = 1;
-     SUB               = 2;
-     SUBACK            = 3;
-     UNSUB             = 4;
-     UNSUBACK          = 5;
-     HOLDMIC           = 6;
-     HOLDMICACK        = 7;
-     RELEASEMIC        = 8;
-     RELEASEMICACK     = 9;
-     DISCONNECT        = 10;
-     DISCONNECTACK     = 11;
-     REGISTER          = 12;
-     REGISTERACK       = 13;
-     SYSTEM            = 14;
-     SYSTEMACK         = 15;
+    UNKNOWN       =0;
+    CONNECT           = 1;
+    CONNECTACK        = 2;
+    SUB               = 3;
+    SUBACK            = 4;
+    UNSUB             = 5;
+    UNSUBACK          = 6;
+    HOLDMIC           = 7;
+    HOLDMICACK        = 8;
+    RELEASEMIC        = 9;
+    RELEASEMICACK     = 10;
+    DISCONNECT        = 11;
+    DISCONNECTACK     = 12;
+    REGISTER          = 13;
+    REGISTERACK       = 14;
+    SYSTEM            = 15;
+    SYSTEMACK         = 16;
     }
