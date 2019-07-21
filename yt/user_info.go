@@ -1,4 +1,4 @@
-package yt
+package ktu
 
 import (
 	"sync"
