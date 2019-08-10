@@ -6,6 +6,7 @@ package ktu
 
 import (
 	"context"
+	"log"
 	"net"
 	"sync"
 	"sync/atomic"
@@ -152,6 +153,7 @@ func (c *Connection) sendUpdate() {
 	defer atomic.AddUint64(&StatRunningGoRoutines, ^uint64(0))
 
 	for {
+		log.Println("sendUpdate")
 		select {
 		case <-time.After(CfgUpdateLoopTimeout * time.Millisecond):
 		case <-c.ctx.Done():
@@ -211,6 +213,7 @@ func (c *Connection) receiveUpdate() {
 	defer atomic.AddUint64(&StatRunningGoRoutines, ^uint64(0))
 
 	for {
+		log.Println("receiveUpdate")
 		select {
 		case <-c.ctx.Done():
 			return
@@ -230,6 +233,7 @@ func (c *Connection) keepAlive() {
 	defer atomic.AddUint64(&StatRunningGoRoutines, ^uint64(0))
 
 	for {
+		log.Println("keepAlive")
 		select {
 		case <-c.ctx.Done():
 			return
