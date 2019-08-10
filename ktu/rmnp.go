@@ -160,72 +160,40 @@ func (impl *protocolImpl) listeningWorker() {
 
 	atomic.AddUint64(&StatRunningGoRoutines, 1)
 	defer atomic.AddUint64(&StatRunningGoRoutines, ^uint64(0))
-	// go func(goctx context.Context) {
-	// 	for {
-	// 		select {
-	// 		case <-goctx.Done():
-	// 			log.Println("close listeningWorker")
-	// 			return
-	// 		}
-	// 	}
-	// }(impl.ctx)
-	// runtime.Gosched()
-	// log.Println("================")
-	// for {
-	// 	defer antiPanic(nil)
-	// 	buffer := impl.bufferPool.Get().([]byte)
-	// 	defer impl.bufferPool.Put(buffer)
-
-	// 	impl.socket.SetDeadline(time.Now().Add(time.Second))
-	// 	length, addr, ok := impl.readFunc(impl.socket, buffer)
-
-	// 	if !ok {
-	// 		return
-	// 	}
-
-	// 	sizedBuffer := buffer[:length]
-
-	// 	if !validateHeader(sizedBuffer) {
-	// 		return
-	// 	}
-	// 	packet := make([]byte, length)
-	// 	copy(packet, sizedBuffer)
-	// 	atomic.AddUint64(&StatReceivedBytes, uint64(length))
-
-	// 	impl.handlePacket(addr, packet)
-	// }
+	go func(goctx context.Context) {
+		for {
+			select {
+			case <-goctx.Done():
+				log.Println("close listeningWorker")
+				return
+			default:
+			}
+			time.Sleep(2e9)
+		}
+	}(impl.ctx)
+	runtime.Gosched()
 	for {
-		select {
-		case <-impl.ctx.Done():
+		defer antiPanic(nil)
+		buffer := impl.bufferPool.Get().([]byte)
+		defer impl.bufferPool.Put(buffer)
+
+		impl.socket.SetDeadline(time.Now().Add(time.Second))
+		length, addr, ok := impl.readFunc(impl.socket, buffer)
+
+		if !ok {
 			return
-		default:
 		}
 
-		func() {
-			defer antiPanic(nil)
+		sizedBuffer := buffer[:length]
 
-			buffer := impl.bufferPool.Get().([]byte)
-			defer impl.bufferPool.Put(buffer)
+		if !validateHeader(sizedBuffer) {
+			return
+		}
+		packet := make([]byte, length)
+		copy(packet, sizedBuffer)
+		atomic.AddUint64(&StatReceivedBytes, uint64(length))
 
-			impl.socket.SetDeadline(time.Now().Add(time.Second))
-			length, addr, next := impl.readFunc(impl.socket, buffer)
-
-			if !next {
-				return
-			}
-
-			sizedBuffer := buffer[:length]
-
-			if !validateHeader(sizedBuffer) {
-				return
-			}
-
-			packet := make([]byte, length)
-			copy(packet, sizedBuffer)
-			atomic.AddUint64(&StatReceivedBytes, uint64(length))
-
-			impl.handlePacket(addr, packet)
-		}()
+		impl.handlePacket(addr, packet)
 	}
 }
 
