@@ -168,6 +168,7 @@ func (impl *protocolImpl) listeningWorker() {
 		}
 	}(impl.ctx)
 	runtime.Gosched()
+	log.Println("================")
 	for {
 		defer antiPanic(nil)
 		buffer := impl.bufferPool.Get().([]byte)
