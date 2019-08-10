@@ -6,7 +6,9 @@ package ktu
 
 import (
 	"context"
+	"log"
 	"net"
+	"runtime"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -156,14 +158,16 @@ func (impl *protocolImpl) listeningWorker() {
 
 	atomic.AddUint64(&StatRunningGoRoutines, 1)
 	defer atomic.AddUint64(&StatRunningGoRoutines, ^uint64(0))
-	go func() {
+	go func(goctx context.Context) {
 		for {
 			select {
-			case <-impl.ctx.Done():
+			case <-goctx.Done():
+				log.Println("close listeningWorker")
 				return
 			}
 		}
-	}()
+	}(impl.ctx)
+	runtime.Gosched()
 	for {
 		defer antiPanic(nil)
 		buffer := impl.bufferPool.Get().([]byte)
