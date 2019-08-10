@@ -156,37 +156,36 @@ func (impl *protocolImpl) listeningWorker() {
 
 	atomic.AddUint64(&StatRunningGoRoutines, 1)
 	defer atomic.AddUint64(&StatRunningGoRoutines, ^uint64(0))
-
+	go func() {
+		for {
+			select {
+			case <-impl.ctx.Done():
+				return
+			}
+		}
+	}()
 	for {
-		select {
-		case <-impl.ctx.Done():
+		defer antiPanic(nil)
+		buffer := impl.bufferPool.Get().([]byte)
+		defer impl.bufferPool.Put(buffer)
+
+		impl.socket.SetDeadline(time.Now().Add(time.Second))
+		length, addr, ok := impl.readFunc(impl.socket, buffer)
+
+		if !ok {
 			return
-		default:
 		}
 
-		func() {
-			defer antiPanic(nil)
-			buffer := impl.bufferPool.Get().([]byte)
-			defer impl.bufferPool.Put(buffer)
+		sizedBuffer := buffer[:length]
 
-			impl.socket.SetDeadline(time.Now().Add(time.Second))
-			length, addr, next := impl.readFunc(impl.socket, buffer)
+		if !validateHeader(sizedBuffer) {
+			return
+		}
+		packet := make([]byte, length)
+		copy(packet, sizedBuffer)
+		atomic.AddUint64(&StatReceivedBytes, uint64(length))
 
-			if !next {
-				return
-			}
-
-			sizedBuffer := buffer[:length]
-
-			if !validateHeader(sizedBuffer) {
-				return
-			}
-			packet := make([]byte, length)
-			copy(packet, sizedBuffer)
-			atomic.AddUint64(&StatReceivedBytes, uint64(length))
-
-			impl.handlePacket(addr, packet)
-		}()
+		impl.handlePacket(addr, packet)
 	}
 }
 
