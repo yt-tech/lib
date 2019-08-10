@@ -94,6 +94,19 @@ func (impl *protocolImpl) init(addr *net.UDPAddr) {
 		New: func() interface{} { return newConnection() },
 	}
 }
+func (impl *protocolImpl) initServer(addr *net.UDPAddr) {
+	impl.address = addr
+	impl.connectGuard = newExecGuard()
+	impl.connections = make(map[uint32]*Connection, 20000)
+
+	impl.bufferPool = sync.Pool{
+		New: func() interface{} { return make([]byte, CfgMTU) },
+	}
+
+	impl.connectionPool = sync.Pool{
+		New: func() interface{} { return newConnection() },
+	}
+}
 
 // is blocking call!
 func (impl *protocolImpl) destroy() {
@@ -168,7 +181,6 @@ func (impl *protocolImpl) listeningWorker() {
 			if !validateHeader(sizedBuffer) {
 				return
 			}
-
 			packet := make([]byte, length)
 			copy(packet, sizedBuffer)
 			atomic.AddUint64(&StatReceivedBytes, uint64(length))

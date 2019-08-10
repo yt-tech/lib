@@ -8,9 +8,9 @@ type execGuard struct {
 }
 
 func newExecGuard() *execGuard {
-	guard := new(execGuard)
-	guard.executions = make(map[uint32]bool)
-	return guard
+	return &execGuard{
+		executions: make(map[uint32]bool),
+	}
 }
 
 func (g *execGuard) tryExecute(id uint32) bool {

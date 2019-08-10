@@ -38,15 +38,13 @@ func newSendBuffer() *sendBuffer {
 
 func (buffer *sendBuffer) reset() {
 	buffer.mutex.Lock()
-	defer buffer.mutex.Unlock()
-
 	buffer.head = nil
 	buffer.tail = nil
+	buffer.mutex.Unlock()
 }
 
 func (buffer *sendBuffer) add(packet *packet, noRTT bool) {
 	buffer.mutex.Lock()
-	defer buffer.mutex.Unlock()
 
 	e := &sendBufferElement{data: sendPacket{
 		packet:   packet,
@@ -62,6 +60,7 @@ func (buffer *sendBuffer) add(packet *packet, noRTT bool) {
 		buffer.tail.next = e
 		buffer.tail = e
 	}
+	buffer.mutex.Unlock()
 }
 
 func (buffer *sendBuffer) remove(e *sendBufferElement) {

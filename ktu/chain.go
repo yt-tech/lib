@@ -20,22 +20,21 @@ type chainLink struct {
 }
 
 func newChain(maxLength byte) *chain {
-	return &chain{maxLength: maxLength}
+	return &chain{
+		maxLength: maxLength,
+	}
 }
 
 func (chain *chain) reset() {
 	chain.mutex.Lock()
-	defer chain.mutex.Unlock()
-
 	chain.next = 0
 	chain.start = nil
 	chain.length = 0
+	chain.mutex.Unlock()
 }
 
 func (chain *chain) chain(packet *packet) {
 	chain.mutex.Lock()
-	defer chain.mutex.Unlock()
-
 	if chain.start == nil {
 		chain.start = &chainLink{next: nil, packet: packet}
 	} else {
@@ -62,6 +61,7 @@ func (chain *chain) chain(packet *packet) {
 	}
 
 	chain.length++
+	chain.mutex.Unlock()
 }
 
 func (chain *chain) popConsecutive() *chainLink {
@@ -92,9 +92,8 @@ func (chain *chain) popConsecutive() *chainLink {
 
 func (chain *chain) skip() {
 	chain.mutex.Lock()
-	defer chain.mutex.Unlock()
-
 	if chain.start != nil {
 		chain.next = chain.start.packet.order
 	}
+	chain.mutex.Unlock()
 }

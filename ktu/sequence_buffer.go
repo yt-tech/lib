@@ -23,12 +23,12 @@ func newSequenceBuffer(size sequenceNumber) *sequenceBuffer {
 
 func (buffer *sequenceBuffer) reset() {
 	buffer.mutex.Lock()
-	defer buffer.mutex.Unlock()
 
 	for i := sequenceNumber(0); i < buffer.size; i++ {
 		buffer.sequences[i] = 0
 		buffer.states[i] = false
 	}
+	buffer.mutex.Unlock()
 }
 
 func (buffer *sequenceBuffer) get(sequence sequenceNumber) bool {
@@ -44,8 +44,7 @@ func (buffer *sequenceBuffer) get(sequence sequenceNumber) bool {
 
 func (buffer *sequenceBuffer) set(sequence sequenceNumber, value bool) {
 	buffer.mutex.Lock()
-	defer buffer.mutex.Unlock()
-
 	buffer.sequences[sequence%buffer.size] = sequence
 	buffer.states[sequence%buffer.size] = value
+	buffer.mutex.Unlock()
 }

@@ -76,7 +76,7 @@ func NewServer(address *net.UDPAddr) *Server {
 		}
 	}
 
-	s.init(address)
+	s.initServer(address)
 	return s
 }
 
