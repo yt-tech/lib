@@ -148,6 +148,7 @@ func (impl *protocolImpl) listen() {
 	for i := 0; i < CfgParallelListenerCount; i++ {
 		go impl.listeningWorker()
 		log.Printf("start listen: %d\n", i)
+		runtime.Gosched()
 	}
 }
 
